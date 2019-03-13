@@ -20,8 +20,9 @@
 <font color="red">注意：for( ... 此处为父级块 ... ) { ... 此处为子块 ... }</font>
 
 ```js
+//////////////////////////////作用域////////////////////////////////
 //var
-for(var i=0; i<10; i++){
+for(var i=0; i<10; i++){ //i为全局作用域
     //TODO
 }
 
@@ -33,4 +34,144 @@ for(let i = 0; i<10; i++){
 }
 
 alert(i);   //报错：i is not defined
+
+//let
+var tmp = 123;
+if (true) {
+  tmp = 'abc'; // ReferenceError
+  let tmp;
+}
+alert(tmp);  //输出值为123，全局tmp与局部tmp不影响
+
+//////////////////////////////变量提升////////////////////////////////
+//var
+console.log(foo); // 输出undefined
+var foo = 2;
+
+//相当于
+var foo;  //声明且初始化为undefined
+console.log(foo);
+foo=2;
+
+//let
+console.log(bar); // 报错ReferenceError
+let bar = 2;    
+//相当于在第一行先声明bar但没有初始化，直到赋值时才初始化
+
+//let
+let a;
+alert(a);//值为undefined
+alert(b);//会报错
+let b;
+
+//////////////////////////////作用域内重复定义变量////////////////////////////////
+//var
+function () {
+  var a = 10;
+  var a = 1;    //不报错
+}
+//let
+function () {
+  let a = 10;
+  var a = 1;    //报错
+}
+// 报错
+function () {
+  let a = 10;
+  let a = 1;    //报错
+}
+```
+
+## const
+const与let特性基本一样，只是适用于定义常量，定义后无法修改。
+
+const定义常量时必须赋值。
+
+<font color="red">由于对象或数组内部某个值赋值时使用的是对象或数组引用，所以不会报错</font>
+
+```js
+const arr = [0,1,2];
+arr = [];   //报错，Uncaught TypeError: Assignment to constant variable.
+console.log(arr);
+
+///////////////////////////////////////////////////////////////////////
+
+const arr = [0,1,2];
+arr[0] = 3;
+console.log(arr);   //输出[3, 1, 2],不会报错
+```
+
+# L-2 解构赋值
+## ES5
+在ES5中，开发者们为了从对象和数组中获取特定数据并赋值给变量，编写了许多看起来同质化的代码
+```js
+let options = {
+    repeat: true,
+    save: false
+};
+// 从对象中提取数据
+let repeat = options.repeat,
+save = options.save;
+```
+这段代码从options对象中提取repeat和save的值，并将其存储为同名局部变量，提取的过程极为相似
+
+如果要提取更多变量，则必须依次编写类似的代码来为变量赋值，如果其中还包含嵌套结构，只靠遍历是找不到真实信息的，必须要深入挖掘整个数据结构才能找到所需数据
+
+## ES6
+ES6添加了解构功能，将数据结构打散的过程变得更加简单，可以从打散后更小的部分中获取所需信息
+> 对象解构
+```js
+let json ={
+    name:'Strive',
+    age:18,
+    job:'码畜'
+};
+let {name, age, job} = json;
+console.log(name, age, job);
+
+////////////////////////////
+
+let {name, age, job} = {
+    name:'Strive',
+    age:18,
+    job:'码畜'
+};
+console.log(name, age, job);
+```
+<font color="red">注意：下面这种情况，一定要用一对小括号包裹解构赋值语句，JS引擎将一对开放的花括号视为一个代码块。语法规定，代码块语句不允许出现在赋值语句左侧，添加小括号后可以将块语句转化为一个表达式，从而实现整个解构赋值过程</font>
+```js
+let json = {
+    name: 'zhangsan',
+    age: 25,
+    sex: 1
+}
+name = 'lisi';
+age = 26;
+sex = 0;
+// {name, age, sex} = json;    //报错，Uncaught SyntaxError: Unexpected token =
+({name, age, sex} = json);
+console.log(name, age, sex);    //输出zhangsan 25 1
+```
+> 数组解构
+```js
+let [u1, u2, u3, u4] = ['zhangsan', 'lisi', 'wangwu', 'zhaoliu'];
+console.log(u1, u2, u3, u4);    //zhangsan lisi wangwu zhaoliu
+
+let arr = ['zhangsan', 'lisi', 'wangwu', 'zhaoliu'];
+[u1, u2, u3, u4] = arr;
+console.log(u1, u2, u3, u4); //zhangsan lisi wangwu zhaoliu
+```
+<font color="red">解构时，左边变量不需要与右边一致，但是层级解构需要对应</font>
+```js
+//不对应
+let [u1, u2, u3, u4] = ['zhangsan', 'lisi', ['wangwu', 'zhaoliu']];
+console.log(u1, u2, u3, u4);    //zhangsan lisi (2) ["wangwu", "zhaoliu"] undefined
+
+//对应且一致
+[u1, u2, [u3, u4]] = ['zhangsan', 'lisi', ['wangwu', 'zhaoliu']];
+console.log(u1, u2, u3, u4);    //zhangsan lisi wangwu zhaoliu
+
+//对应但不一致
+[u1, u2, [u3]] = ['zhangsan', 'lisi', ['wangwu', 'zhaoliu']];
+console.log(u1, u2, u3);    //zhangsan lisi wangwu
 ```

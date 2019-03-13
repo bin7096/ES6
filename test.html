@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ES6</title>
+</head>
+<body>
+    <script>
+        //不对应
+        let [u1, u2, u3, u4] = ['zhangsan', 'lisi', ['wangwu', 'zhaoliu']];
+        console.log(u1, u2, u3, u4);    //zhangsan lisi (2) ["wangwu", "zhaoliu"] undefined
+
+        //对应且一致
+        [u1, u2, [u3, u4]] = ['zhangsan', 'lisi', ['wangwu', 'zhaoliu']];
+        console.log(u1, u2, u3, u4);    //zhangsan lisi wangwu zhaoliu
+
+        //对应但不一致
+        [u1, u2, [u3]] = ['zhangsan', 'lisi', ['wangwu', 'zhaoliu']];
+        console.log(u1, u2, u3);    //zhangsan lisi wangwu
+    </script>
+</body>
+</html>
