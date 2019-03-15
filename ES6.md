@@ -161,7 +161,7 @@ let arr = ['zhangsan', 'lisi', 'wangwu', 'zhaoliu'];
 [u1, u2, u3, u4] = arr;
 console.log(u1, u2, u3, u4); //zhangsan lisi wangwu zhaoliu
 ```
-<font color="red">解构时，左边变量不需要与右边一致，但是层级解构需要对应</font>
+<font color="red">解构时，左边变量不需要与右边一致，但是层级结构需要对应</font>
 ```js
 //不对应
 let [u1, u2, u3, u4] = ['zhangsan', 'lisi', ['wangwu', 'zhaoliu']];
@@ -174,4 +174,55 @@ console.log(u1, u2, u3, u4);    //zhangsan lisi wangwu zhaoliu
 //对应但不一致
 [u1, u2, [u3]] = ['zhangsan', 'lisi', ['wangwu', 'zhaoliu']];
 console.log(u1, u2, u3);    //zhangsan lisi wangwu
+```
+> 不定元素解构
+```js
+let [first, ...colors] = ['red', 'blue', 'green', 'orange'];
+console.log(first);     //red
+console.log(colors);    //["blue", "green", "orange"]
+console.log(colors.length);     //3
+console.log(colors[0], colors[1], colors[2]);   //blue green orange
+```
+> 数组复制
+### ES5
+```js
+var colors = ['red', 'blue', 'green', 'orange'];
+var cloneColors = colors.concat();  //concat()设计初衷是用来连接两个数组，不传参时会返回当前函数的副本
+console.log(cloneColors);   //["red", "blue", "green", "orange"]
+```
+### ES6
+```js
+let colors = ['red', 'blue', 'green', 'orange'];
+let [...cloneColors] = colors;
+console.log(cloneColors);   //["red", "blue", "green", "orange"]
+```
+> 默认值
+```js
+let [first, second = 'green'] = ['red'];
+console.log(first);     //red
+console.log(second);    //green
+```
+```js
+let [first, second = 'green'] = ['red', 'blue'];
+console.log(first);     //red
+console.log(second);    //blue
+```
+> 互换值操作
+### ES5
+```js
+var a = 'zhangsan';
+var b = 'lisi';
+//a和b交换值
+var c = a;
+a = b;
+b = c;
+console.log(a, b);  //lisi zhangsan
+```
+### ES6
+```js
+let a = 'zhangsan';
+let b = 'lisi';
+//a和b交换值
+[b, a] = [a, b];
+console.log(a, b);  //lisi zhangsan
 ```
