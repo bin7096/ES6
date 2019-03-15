@@ -8,9 +8,11 @@
 </head>
 <body>
     <script>
-        let [first, second = 'green'] = ['red', 'blue'];
-        console.log(first);     //red
-        console.log(second);    //green
+        let {valueOf:s1} = {num:123};
+        console.log(s1);
+        console.log(Number.prototype.valueOf);
+        // console.log(s1 === Number.prototype.toString);
+        console.dir(Number);
     </script>
 </body>
 </html>

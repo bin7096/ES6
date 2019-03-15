@@ -175,6 +175,11 @@ console.log(u1, u2, u3, u4);    //zhangsan lisi wangwu zhaoliu
 [u1, u2, [u3]] = ['zhangsan', 'lisi', ['wangwu', 'zhaoliu']];
 console.log(u1, u2, u3);    //zhangsan lisi wangwu
 ```
+> 数组长度
+```js
+let {length} = ['zhangsan', 'lisi', 'wangwu', 'zhaoliu'];
+console.log(length);    //4
+```
 > 不定元素解构
 ```js
 let [first, ...colors] = ['red', 'blue', 'green', 'orange'];
@@ -225,4 +230,20 @@ let b = 'lisi';
 //a和b交换值
 [b, a] = [a, b];
 console.log(a, b);  //lisi zhangsan
+```
+> 字符串解构
+
+字符串也可以解构赋值。这是因为，字符串被转换成了一个类似数组的对象
+```js
+let [a, b, c, d, e] = 'hello';
+console.log(a); //h
+console.log(b); //e
+console.log(c); //l
+console.log(d); //l
+console.log(e); //o
+```
+类似数组的对象都有一个length属性，因此还可以对这个属性解构赋值
+```js
+let {length} = 'hello';
+console.log(length);    //5
 ```
