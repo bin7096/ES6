@@ -247,3 +247,87 @@ console.log(e); //o
 let {length} = 'hello';
 console.log(length);    //5
 ```
+# L-3字符串新增
+> 对Unicode的支持：codePointAt()、fromCodePoint()
+
+在ES5中，我们经常使用charAt() 来表示字符存储位置，用charCodeAt() 来表示对应位置字符Unicode 的编码。在JavaScript 内部，字符以UTF-16 的形式存储，每个字符固定为2个字节，对于那些需要4个字节存储的字符并不支持。因此，ES6使用 codePointAt() 方法来支持存储4字节的字符。
+
+在 ES5 中，从码点返回对应的字符的方法是 fromCharCode()，这个并不能返回字符为32位的utf-16 的字符。ES6 中使用 String.fromCodePoint() 代替
+
+```js
+let str = '测试';
+//codePointAt()返回四字节字符的对应字符Unicode编码
+console.log(str.codePointAt(0));    //27979
+console.log(str.codePointAt(1));    //35797
+//fromCodePoint()根据Unicode编码返回对应字符
+console.log(String.fromCodePoint(27979));
+console.log(String.fromCodePoint(35797));
+
+console.log(String.fromCodePoint(0));   //
+```
+
+> 字符串遍历 for...of..
+```js
+let str = 'test';
+for (const s of str) {
+    console.log(s);     //t e s t
+}
+```
+> 判断字符是否在字符串中
+## ES5
+使用<font color="red">**indexOf()**</font>返回字符起始位置，如不存在则返回-1。
+```js
+//ES5
+var str = '这是测试字符串';
+console.log(str.indexOf('测试'));       //2
+console.log(str.indexOf('测试用例'));   //-1
+```
+## ES6
+新增includes()、startWith()、endWith()
+
+<font color="red">**includes()**</font>返回布尔值，判断是否存在。
+
+<font color="red">**startsWith()**</font>返回布尔值，判断字符是否在字符串头部。
+
+<font color="red">**endsWith()**</font>返回布尔值，判断字符是否在字符串尾部。
+```js
+//ES6
+let string = '这是测试字符串2';
+console.log(string.includes('测试字'));     //true 
+console.log(string.startsWith('这是'));     //true
+console.log(string.endsWith('字符串2'));    //true
+console.log(string.includes('测试用例'));   //false
+```
+### 第二参数
+<font color="red">使用第二个参数n时，**endsWith()** 指的是针对前n个字符，二其它两个方法是指开始位置的字符到结束位置的字符。</font>
+```js
+//第二参数
+console.log(string.includes('测试字', 2));  //true
+console.log(string.startsWith('这是', 0));  //true
+console.log(string.endsWith('字符串2', 5)); //false
+```
+> 字符串重复复制 repeat()
+repeat()返回一个新字符串，参数为复制次数
+```js
+let str = '这是测试字符串';
+console.log(str.repeat(1)); //这是测试字符串
+console.log(str.repeat(5)); //这是测试字符串这是测试字符串这是测试字符串这是测试字符串这是测试字符串
+
+//参数为小数、NaN、字符串时
+//小数时自动向下取整
+console.log(str.repeat(1.2));   //这是测试字符串
+console.log(str.repeat(1.8));   //这是测试字符串
+
+//NaN时自动转化为0
+console.log(str.repeat(NaN));
+
+//自动转成int类型，若转换不了，则转换为0
+console.log(str.repeat('3'));
+console.log(str.repeat('3dsg'));
+console.log(str.repeat('gfgfgf2'));
+console.log(str.repeat('dgfgfghgf'));
+
+//参数为负数和infinity时报错
+// console.log(str.repeat(-5));        //Uncaught RangeError: Invalid count value
+// console.log(str.repeat(Infinity));     //Uncaught RangeError: Invalid count value
+```
