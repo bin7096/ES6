@@ -250,9 +250,9 @@ console.log(length);    //5
 # L-3字符串新增
 > 对Unicode的支持：codePointAt()、fromCodePoint()
 
-在ES5中，我们经常使用charAt() 来表示字符存储位置，用charCodeAt() 来表示对应位置字符Unicode 的编码。在JavaScript 内部，字符以UTF-16 的形式存储，每个字符固定为2个字节，对于那些需要4个字节存储的字符并不支持。因此，ES6使用 codePointAt() 方法来支持存储4字节的字符。
+在ES5中，我们经常使用<font color="red">**charAt()**</font>来表示字符存储位置，用<font color="red">**charCodeAt()**</font>来表示对应位置字符Unicode 的编码。在JavaScript 内部，字符以UTF-16 的形式存储，每个字符固定为2个字节，对于那些需要4个字节存储的字符并不支持。因此，ES6使用<font color="red">**codePointAt()**</font>方法来支持存储4字节的字符。
 
-在 ES5 中，从码点返回对应的字符的方法是 fromCharCode()，这个并不能返回字符为32位的utf-16 的字符。ES6 中使用 String.fromCodePoint() 代替
+在 ES5 中，从码点返回对应的字符的方法是<font color="red">**fromCharCode()**</font>，这个并不能返回字符为32位的utf-16 的字符。ES6 中使用<font color="red">**String.fromCodePoint()**</font>代替
 
 ```js
 let str = '测试';
@@ -330,4 +330,56 @@ console.log(str.repeat('dgfgfghgf'));
 //参数为负数和infinity时报错
 // console.log(str.repeat(-5));        //Uncaught RangeError: Invalid count value
 // console.log(str.repeat(Infinity));     //Uncaught RangeError: Invalid count value
+```
+> 字符串模板
+## ES5
+```js
+//ES5
+var arr = ['test','test','test','test','test','test','test','test','test','test'];
+var html = '';
+for (var i = 0; i < arr.length; i++) {
+    html += '<li>' + arr[i] + '</li>';
+}
+
+html += '<li>' + arr[0] + '</li>' +
+'<li>' + arr[0] + '</li>' +
+'<li>' + arr[0] + '</li>' +
+'<li>' + arr[0] + '</li>' +
+'<li>' + arr[0] + '</li>';
+var obj = document.getElementById('ul');
+obj.innerHTML = html;
+```
+## ES6
+```js
+//ES6
+let arr = ['test','test','test','test','test','test','test','test','test','test'];
+let html = '';
+arr.forEach(a => {
+    html += `<li>${a}</li>`;
+});
+
+html += `<li>${arr[0]}</li>
+<li>${arr[0]}</li>
+<li>${arr[0]}</li>
+<li>${arr[0]}</li>
+<li>${arr[0]}</li>`;
+
+let obj = document.getElementById('ul');
+obj.innerHTML = html;
+```
+模板字符串使用反引号（\`）来代替普通字符串的单引号和双引号。模板字符串可以包含特定语法（${expression}）的占位符。占位符中的表达式和周围的文本会一起传递给一个默认的函数，该函数负责将所有的部分连接起来，如果模板字符串由表达式开头，则该字符串被称为带标签的模板字符串，该表达式通常是一个函数，它会在模板字符串处理后被调用，在输出最终结果前，你都可以通过该函数来对模板字符串进行操作处理，在模板字符中使用反引号（\`）时，需要在它前面加上转义符（\）。
+
+## 多行字符串
+```js
+console.log(`这是测试文字1，
+这是测试文字2`);
+//这是测试文字1，
+//这是测试文字2
+```
+
+## 表达式插补
+```js
+let n = 100;
+let n2 = 399;
+console.log(`n + n2 = ${n + n2}`);  //n + n2 = 499
 ```

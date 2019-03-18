@@ -7,28 +7,13 @@
     <title>ES6</title>
 </head>
 <body>
-    <script>
-        let str = '这是测试字符串';
-        console.log(str.repeat(1)); //这是测试字符串
-        console.log(str.repeat(5)); //这是测试字符串这是测试字符串这是测试字符串这是测试字符串这是测试字符串
-
-        //参数为小数、NaN、字符串时
-        //小数时自动向下取整
-        console.log(str.repeat(1.2));   //这是测试字符串
-        console.log(str.repeat(1.8));   //这是测试字符串
-
-        //NaN时自动转化为0
-        console.log(str.repeat(NaN));
-
-        //自动转成int类型，若转换不了，则转换为0
-        console.log(str.repeat('3'));
-        console.log(str.repeat('3dsg'));
-        console.log(str.repeat('gfgfgf2'));
-        console.log(str.repeat('dgfgfghgf'));
-
-        //参数为负数和infinity时报错
-        // console.log(str.repeat(-5));        //Uncaught RangeError: Invalid count value
-        // console.log(str.repeat(Infinity));     //Uncaught RangeError: Invalid count value
-    </script>
+    <ul id="ul">
+        
+    </ul>
 </body>
+    <script>
+        let n = 100;
+        let n2 = 399;
+        console.log(`n + n2 = ${n + n2}`);  //n + n2 = 499
+    </script>
 </html>
