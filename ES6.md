@@ -332,6 +332,22 @@ console.log(str.repeat('dgfgfghgf'));
 // console.log(str.repeat(Infinity));     //Uncaught RangeError: Invalid count value
 ```
 > 字符串模板
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ES6</title>
+</head>
+<body>
+    <ul id="ul">
+        
+    </ul>
+</body>
+</html>
+```
 ## ES5
 ```js
 //ES5
@@ -382,4 +398,48 @@ console.log(`这是测试文字1，
 let n = 100;
 let n2 = 399;
 console.log(`n + n2 = ${n + n2}`);  //n + n2 = 499
+```
+
+## 带标签的模板字符串
+<font color="red">更高级的形式模板字面值被标记模板文本。标记使您可以分析模板文本功能。标记功能的第一个参数包含一个字符串值的数组。其余参数时相关的表达式。最后，你的函数可以返回处理好的字符串。</font>
+```js
+var person = 'Mike';
+var age = 28;
+function tagFunc(strings, personExp, ageExp) {
+
+  var str0 = strings[0]; // "that "
+  var str1 = strings[1]; // " is a "
+
+  // 在技术上,有一个字符串在
+  // 最终的表达式 (在我们的例子中)的后面,
+  // 但它是空的(""), 所以被忽略.
+  // var str2 = strings[2];
+
+  var ageStr;
+  if (ageExp > 60){
+    ageStr = 'old person';
+  } else {
+    ageStr = 'young person';
+  }
+  return str0 + personExp + str1 + ageStr;
+}
+var output = myTag`that ${ person } is a ${ age }`;
+console.log(output);    // that Mike is a young person
+```
+## rest 参数的写法
+```js
+let name = '张三',
+    age = 20,
+    message = show`我来给大家介绍:${name}的年龄是${age}.`;
+
+function show(stringArr,...values){
+  let output ="";
+  let index = 0
+  for(;index<values.length;index++){
+        output += stringArr [index]+values[index];
+    }
+    output += stringArr [index];
+    return output;
+}
+message;       //"我来给大家介绍:张三的年龄是20."
 ```
