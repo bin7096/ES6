@@ -443,3 +443,122 @@ function show(stringArr,...values){
 }
 message;       //"我来给大家介绍:张三的年龄是20."
 ```
+# 函数新增
+
+> 默认参数
+## ES5
+```js
+function test(a, b){
+    var a = a || '默认值1';
+    var b = b || '默认值2';
+    console.log(a, b);
+}
+test(1, 2);                 //1 2
+//当传递参数转换成boolean为false时，触发默认值。比如不传、0、null、空字符、undefined
+test(0, 1);                 //默认值1 1
+test('', 123);              //默认值1 123
+test(null, 'dffgf15141');   //默认值1 dffgf15141
+test(undefined, '0000');    //默认值1 0000
+```
+## ES6
+```js
+function test(a = '默认值1', b = '默认值2'){
+    console.log(a, b);
+}
+test(1, 2);                 //1 2
+//只有不传和undefined时会触发函数默认值
+test(0, 1);                 //0 1
+test('', 123);              //  123
+test(null, 'dffgf15141');   //null dffgf15141
+test(undefined, '0000');    //默认值1 0000
+test('1234');               //1234 默认值2
+```
+## 默认参数和解构赋值
+```js
+// 第一种写法，参数默认值为空对象，解构赋值有具体的默认值
+function test({a = 1, b = 2} = {}){
+    console.log(a, b);
+}
+// 第二种写法，参数默认值是一个具体的属性对象，而对象解构赋值没有设置默认值
+function test2({a, b} = {a : 3, b : 4}){
+    console.log(a, b);
+}
+// 函数没有参数时
+test();                     //1 2
+test2();                    //3 4
+// a 和 b 都有值
+test(0, 5);                 //1 2
+test2('p', 'g');            //undefined undefined
+test({a : 0, b : 5});       //0 5
+test2({a : 'p', b : 'g'});  //p g
+test({});                   //1 2
+test2({});                  //undefined undefined
+```
+## 默认参数对函数length属性的影响
+```js
+(function (a) {}).length            // 1
+(function (a = 5) {}).length        // 0
+(function (a, b, c = 5) {}).length  // 2
+(function(a, ...b) {} ).length      // 1
+```
+<font color="red">函数的参数在指定默认值之后，函数的length 属性会失真，返回的length 值，是没有指定默认值的参数的个数，注意这里的length 也不包括rest参数的个数。</font>
+
+> rest参数
+
+写法：<font color="red">...vals（三个点+变量名）</font>获取函数多余的参数，值为数组
+```js
+function test(a, ...vals) {
+    console.log(a);     //1
+    console.log(vals);  //[1,2,3,4,5,6,7,8,9]
+}
+test(1,2,3,4,5,6,7,8,9);
+
+function test(a, ...vals) {
+    console.log(a);     //1
+    console.log(vals);  //[]
+}
+test(1);
+```
+<font color="red">rest参数必须是尾参数，即rest参数后面不能有其他参数</font>
+```js
+function test(a, ...vals, c) {
+    console.log(a);     
+    console.log(vals);  
+}
+test(1,2,3,4,5,6,7,8,9);    //Uncaught SyntaxError: Rest parameter must be last formal parameter
+```
+> name属性
+
+ES6中增加了函数的name属性
+```js
+const animal = function() {};
+animal.name;  // "animal"
+```
+Function 构造函数会发的函数实例，name 属性的值为“anonymous”
+```js
+(new Function).name; //  "anonymous"
+```
+bind 返回的函数，name属性值会加上“bound”前缀
+```js
+function animal() {};
+animal.bind({}).name; // "bound animal"
+```
+匿名函数的bind 返回的值“bound”
+```js
+(function () {}).bind({}).name; //  "bound"
+```
+
+> 箭头函数
+## ES5
+```js
+var sum = function (a, b){
+    return a + b;
+}
+console.log(sum(1, 2)); //3
+```
+## ES6
+增加了箭头函数的写法，=>左边为函数参数，右边为函数返回体
+```js
+let sum = (a, b) => a + b;
+console.log(sum(1, 2));     //3
+```
