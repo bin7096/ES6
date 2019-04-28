@@ -562,3 +562,17 @@ console.log(sum(1, 2)); //3
 let sum = (a, b) => a + b;
 console.log(sum(1, 2));     //3
 ```
+
+> 数组循环
+## ES5新增
+* arr.forEach(callback, [thisObject])
+* arr.map(callback, [thisObject])
+* arr.filter(callback, [thisObject])
+* arr.some(callback, [thisObject])
+* arr.every(callback, [thisObject])
+```js
+arr.forEach(function(val, index, arr){
+
+});
+```
+forEach、map、filter、some、every的第一个参数为回调函数，第二参数修改回调函数中this的指向，callback中接收三个参数：val()

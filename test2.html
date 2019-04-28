@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function sum(a, b){
+        return a + b;
+    }
+    console.log(sum(2, 3));
+    function curry(a, b){
+        return function (b){
+            return a + b;
+        }
+    }
+    var sum2 = curry(2);
+    console.log(sum2(3));
+    console.log(curry(2)(3));
+</script>
+</html>
