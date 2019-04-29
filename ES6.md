@@ -563,6 +563,8 @@ let sum = (a, b) => a + b;
 console.log(sum(1, 2));     //3
 ```
 
+# 数组新增
+
 > 数组循环
 ## ES5新增
 * arr.forEach(callback, [thisObject])
@@ -570,9 +572,168 @@ console.log(sum(1, 2));     //3
 * arr.filter(callback, [thisObject])
 * arr.some(callback, [thisObject])
 * arr.every(callback, [thisObject])
+* arr.reduce(callback, [initialValue])
+* arr.reduceRight(callback, [initialValue])
 ```js
 arr.forEach(function(val, index, arr){
-
-});
+}, window);
 ```
-forEach、map、filter、some、every的第一个参数为回调函数，第二参数修改回调函数中this的指向，callback中接收三个参数：val()
+forEach、map、filter、some、every的第一个参数为回调函数，第二参数修改回调函数中this的指向，callback中接收三个参数：val(数组中的当前值)、index(当前下标)、arr(当前循环的数组)
+### forEach
+forEach代替for循环，但不遍历占空位的数组元素
+```js
+var arr = [1,2,3,4,5,6,7,8,9,0];
+console.log(arr);           //[1,2,3,4,5,6,7,8,9,0]，length:10
+delete(arr[3]);
+console.log(arr);           //[1,2,3,,5,6,7,8,9,0]，length:10，arr[3]仍占位
+for (var i = 0; i < arr.length; i++) {
+    console.log(arr[i]);        //1,2,3,undefined,5,6,7,8,9,0，仍遍历占空位元素
+}
+arr.forEach(function (val) {
+    console.log(val);           //1,2,3,5,6,7,8,9,0，忽略遍历占空位元素
+})
+```
+
+forEach第二元素改变回调函数体的this指向，不指定时默认为window对象，在严格模式下不指定则为undefined。
+```js
+var arr = [1];
+
+arr.forEach(function (val) {
+    console.log(this);          //window对象
+})
+
+arr.forEach(function (val) {
+    'use strict';
+    console.log(this);          //undefined
+})
+```
+### map
+map的使用方法与forEach类似，但map有返回值，将回调函数中处理完毕的数组映射成一个新的数组。
+```js
+var arr = [1,2,3,4,5,6,7,8,9,0];
+console.log(arr);               //[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+var newArr = arr.map(function (val) {
+    return val * 2;
+})
+console.log(newArr);            //[2, 4, 6, 8, 10, 12, 14, 16, 18, 0]
+```
+map方法的回调函数必须要有return，不然效果如下
+```js
+var arr = [1,2,3,4,5];
+var newArr = arr.map(function (val) {
+})
+console.log(newArr);            //[undefined, undefined, undefined, undefined, undefined]
+```
+### filter
+filter在回调体中返回符合条件的内容，作用于筛选数组，于map相似，都需要return。
+```js
+var arr = [1,2,3,4,5,6,7,8,9,0];
+console.log(arr);               //[1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+//取出奇数
+var newArr = arr.filter(function (val) {
+    return val % 2 === 1
+})
+console.log(newArr);            //[1, 3, 5, 7, 9]
+```
+filter的回调体中返回true和false，如果返回的值==true，就会出现在新的数组中，返回的值不需要全等于true/false
+```js
+var arr = [0,1,2,3,undefined,null];
+var newArr = arr.filter(function (val) {
+    return val;
+})
+console.log(newArr);    //[1, 2, 3]
+```
+### some
+只要一部分数组元素满足回调体中的条件，返回结果就为true，否则返回false
+```js
+var arr = [1,2,3,4,5,6,7,8,9,0];
+
+var bool = arr.some(function (val) {
+    return val > 5;
+})
+console.log(bool);      //true
+
+var bool2 = arr.some(function (val) {
+    return val > 10;
+})
+console.log(bool2);     //false
+```
+### every
+与some类似，不同的地方：需要数组所有元素满足回调体中的规则才返回true，否则返回false
+```js
+var arr = [1,2,3,4,5,6,7,8,9,0];
+
+var bool = arr.every(function (val) {
+    return val >= 0;
+})
+console.log(bool);      //true
+
+var bool2 = arr.every(function (val) {
+    return val > 0;
+})
+console.log(bool2);     //false
+```
+### reduce和reduceRight
+```js
+arr.reduce(function(prev, current, index, arr){}, [initialValue]);
+```
+reduce类似于递归遍历数组，它的参数与上面的方法不一样，参数一为回调函数，参数二指定初始值(缺省)，遍历初始化当指定初始值时，prev为初始值，current为第一个元素。不指定时，prev为第一个元素，current为第二个元素。
+回调函数接收四个参数：prev(上一个元素),current(下一个元素),index(下标),arr(当前遍历的数组)。
+reduceRight则从右向左迭代数组。
+```js
+var arr = [1,2,3,4,5];
+
+var res = arr.reduce(function (prev, current) {
+    console.log(this);
+    return prev + current;
+});
+console.log(res);       //15
+
+// //初始化
+// prev = 1, current = 2;
+
+// //迭代1
+// prev = 3, current = 3;
+
+// //迭代2
+// prev = 6, current = 4;
+
+// //迭代4
+// prev = 10, current = 5;
+
+// //迭代5
+// prev = 15, current = undefined; //退出
+```
+如果设置了初始值，会比没有设置多出一次迭代
+```js
+var arr = [1,2,3,4,5];
+
+var res = arr.reduce(function (prev, current) {
+    console.log(this);
+    return prev + current;
+}, 2);
+console.log(res);       //17
+
+// //初始化
+// prev = 2, current = 1;
+
+// //迭代1
+// prev = 3, current = 2;
+
+// //迭代2
+// prev = 5, current = 3;
+
+// //迭代4
+// prev = 8, current = 4;
+
+// //迭代5
+// prev = 12, current = 5;
+
+// //迭代6
+// prev = 17, current = undefined; //退出
+```
+
+## ES6
+数组本身新增：
+* arr.find()
+### 
