@@ -1,7 +1,7 @@
 # `回调地狱`与`Promise`
 > 在ES5以及ES5之前，异步操作结果对应的逻辑处理，都是放在回调中。回调保证了异步的`事件触发时机`和`逻辑代码的执行顺序`，但是也带来了头疼的`回调地狱`问题。
 ## 回调地狱
-> 模拟异步回调层级过多的情况
+> 模拟异步`回调层级过多`的情况
 ```php
 // 后端代码，使用PHP做接口，并模拟5s的网络延迟
 <?php
@@ -108,14 +108,14 @@ sendAjax(url, data).then(function (res) {
 ```
 可以看到，Promise的形式，使得JavaScript的异步回调处理以`近似同步`的代码编写（实际上请求仍是异步处理）。
 ## Promise
-> ES6的Promise是为了解决回调地狱的问题而出现的，它用`链式调用`的形式替代了原先的`回调嵌套`形式（jQuery的deferred也属于Promise范畴）。链式调用不是JavaScript的新语法（jQuery使用的就是链式语法）。
+> ES6的Promise是为了解决回调地狱的问题而出现的，它用`链式调用`的形式替代了原先的`回调嵌套`形式（jQuery的`deferred`也属于Promise范畴）。链式调用不是JavaScript的新语法（jQuery使用的就是链式语法）。
 ### Promise是什么
 > 在JavaScript中，Promise是内置的一个`构造方法`。在使用时，需要使用`new`关键字进行实例化。
 
 参照[`Promise的前世今生和妙用技巧`](https://www.cnblogs.com/whitewolf/p/promise-best-practice.html)介绍如下：
 
 * 英文的意思是`承诺`，它表示如果A调用一个长时间处理任务B时，B会返回一个`“承诺”`给A，A则继续执行其他任务。当B完成任务时，会通过A并执行与A之间预先约定的回调。
-* jQuery的deferred也属于Promise范畴，而deferred在英语中意为`“延迟”`。说明Promise解决的问题是一种带有延迟性的事件，这个事件会被延迟到未来某个合适的时机再执行。
+* `jQuery`的`deferred`也属于Promise范畴，而`deferred`在英语中意为`“延迟”`。说明Promise解决的问题是一种带有延迟性的事件，这个事件会被延迟到未来某个合适的时机再执行。
 
 参照`阮一峰`出版的[`《ECMAScript6入门》`](http://es6.ruanyifeng.com/)介绍如下：
 
@@ -135,3 +135,10 @@ sendAjax(url, data).then(function (res) {
 * Promise对象必须实现`then方法`，then是Promise规范的`核心`。
 * Promise的then方法`必须返回`一个Promise对象，同一个Promise对象可以调用`多个then方法`，并且回调的执行顺序跟它们的注册顺序一致。
 * then方法接收两个参数，分别为`成功回调`和`失败回调`。分别在`Padding转到Fulfilled`和`Padding转到Rejected`时调用。
+
+![avatar](/Promise/promises-流程图.png)
+
+### Promise的作用
+> `Promise`可以将原来回调地狱中的回调函数，从`横向式增加`变为`纵向增长`。以`链式的风格`和`纵向的书写`，使得代码拥有`更好的可读性`和`易于维护`。
+### Promise和async、await的关系
+> 在`ECMAScript2016（ES7）`中引入了`async`和`await`两个关键字，用于解决这类异步任务。这两个关键字是`ES6`中的`生成器（generator）`和`Promise`的组合新语法，`内置generator的执行器`的一种方式。
