@@ -124,11 +124,13 @@ sendAjax(url, data).then(function (res) {
 * 有了Promise对象，就可以将异步操作以同步操作的流程表达出来。
 ### Promise对象的规范
 * Promise对象有三种状态：
+
 | 状态      | 意义                         |
 | --------- | ---------------------------- |
 | Pending   | 进行中，等待任务的完成或被拒绝。|
 | Fulfilled | 任务执行完成并且成功的状态。    |
 | Rejected  | 任务完成并且失败的状态。       |
+
 * Promise的状态只可能从`Pending`状态转到`Fulfilled`状态或`Rejected`状态，且`不可逆向转换`。同时`Fulfilled`和`Rejected`状态也不能相互转换。
 * Promise对象必须实现`then方法`，then是Promise规范的`核心`。
 * Promise的then方法`必须返回`一个Promise对象，同一个Promise对象可以调用`多个then方法`，并且回调的执行顺序跟它们的注册顺序一致。
