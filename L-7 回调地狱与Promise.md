@@ -110,15 +110,26 @@ sendAjax(url, data).then(function (res) {
 ## Promise
 > ES6的Promise是为了解决回调地狱的问题而出现的，它用`链式调用`的形式替代了原先的`回调嵌套`形式（jQuery的deferred也属于Promise范畴）。链式调用不是JavaScript的新语法（jQuery使用的就是链式语法）。
 ### Promise是什么
+> 在JavaScript中，Promise是内置的一个`构造方法`。在使用时，需要使用`new`关键字进行实例化。
+
 参照[`Promise的前世今生和妙用技巧`](https://www.cnblogs.com/whitewolf/p/promise-best-practice.html)介绍如下：
 
 * 英文的意思是`承诺`，它表示如果A调用一个长时间处理任务B时，B会返回一个`“承诺”`给A，A则继续执行其他任务。当B完成任务时，会通过A并执行与A之间预先约定的回调。
 * jQuery的deferred也属于Promise范畴，而deferred在英语中意为`“延迟”`。说明Promise解决的问题是一种带有延迟性的事件，这个事件会被延迟到未来某个合适的时机再执行。
 
-参照`阮一峰`出版的`《ECMAScript6入门》`介绍如下：
+参照`阮一峰`出版的[`《ECMAScript6入门》`](http://es6.ruanyifeng.com/)介绍如下：
 
 * Promise简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。
 * Promise提供统一的API，各种异步操作都可以使用同样的方法进行处理，使得控制异步操作更加容易。
 * 有了Promise对象，就可以将异步操作以同步操作的流程表达出来。
-### Promise对象的状态
-* Promise对象
+### Promise对象的规范
+* Promise对象有三种状态：
+| 状态      | 意义                         |
+| --------- | ---------------------------- |
+| Pending   | 进行中，等待任务的完成或被拒绝。|
+| Fulfilled | 任务执行完成并且成功的状态。    |
+| Rejected  | 任务完成并且失败的状态。       |
+* Promise的状态只可能从`Pending`状态转到`Fulfilled`状态或`Rejected`状态，且`不可逆向转换`。同时`Fulfilled`和`Rejected`状态也不能相互转换。
+* Promise对象必须实现`then方法`，then是Promise规范的`核心`。
+* Promise的then方法`必须返回`一个Promise对象，同一个Promise对象可以调用`多个then方法`，并且回调的执行顺序跟它们的注册顺序一致。
+* then方法接收两个参数，分别为`成功回调`和`失败回调`。分别在`Padding转到Fulfilled`和`Padding转到Rejected`时调用。
