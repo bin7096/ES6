@@ -87,7 +87,7 @@ let data = {};
 sendAjax(url, data).then(function (res) {
     // 验证用户名成功之后的逻辑处理
     // TODO...
-    console.log('验证用户名的请求', res);
+    console.log('验证用户名的请求结果', res);
     // 返回验证密码的请求（Promise对象），给下一个链式调用的then方法使用
     return sendAjax(url, data);
 }).then(function (res) {
@@ -99,7 +99,7 @@ sendAjax(url, data).then(function (res) {
 }).then(function (res) {
     // 校验验证码成功之后的逻辑处理
     // TODO...
-    console.log('校验验证码的请求', res);
+    console.log('校验验证码的请求结果', res);
 }).catch(function () {
     // 任何一个异步请求失败的结果，都会跑到这里面进行处理，并中断当前异步请求之后的逻辑操作
     // TODO...
@@ -108,3 +108,8 @@ sendAjax(url, data).then(function (res) {
 ```
 可以看到，Promise的形式，使得JavaScript的异步回调处理以`近似同步`的代码编写（实际上请求仍是异步处理）。
 ## Promise
+ES6的Promise是为了解决回调地狱的问题而出现的，它用`链式调用`的形式替代了原先的`回调嵌套`形式。链式调用不是JavaScript的新语法（jQuery使用的就是链式语法）。
+
+> Promise简单说就是一个容器，里面保存着某个未来才会结束的事件（通常是一个异步操作）的结果。
+> Promise提供统一的API，各种异步操作都可以使用同样的方法进行处理，使得控制异步操作更加容易。
+> 有了Promise对象，就可以将异步操作以同步操作的流程表达出来。
