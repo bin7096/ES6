@@ -135,6 +135,7 @@ sendAjax(url, data).then(function (res) {
 * Promise对象必须实现`then方法`，then是Promise规范的`核心`。
 * Promise的then方法`必须返回`一个Promise对象，同一个Promise对象可以调用`多个then方法`，并且回调的执行顺序跟它们的注册顺序一致。
 * then方法接收两个参数，分别为`成功回调`和`失败回调`。分别在`Padding转到Fulfilled`和`Padding转到Rejected`时调用。
+* 当使用了`catch方法`时，`then方法`可以不传`第二参数`，在当前链式操作中，`首个失败回调`会在catch中执行，并且中断后面的异步操作。
 
 ![avatar](/Promise/promises-流程图.png)
 
@@ -142,3 +143,20 @@ sendAjax(url, data).then(function (res) {
 > `Promise`可以将原来回调地狱中的回调函数，从`横向式增加`变为`纵向增长`。以`链式的风格`和`纵向的书写`，使得代码拥有`更好的可读性`和`易于维护`。
 ### Promise和async、await的关系
 > 在`ECMAScript2016（ES7）`中引入了`async`和`await`两个关键字，用于解决这类异步任务。这两个关键字是`ES6`中的`生成器（generator）`和`Promise`的组合新语法，`内置generator的执行器`的一种方式。
+
+## Promise的基本使用
+### 创建Promise实例
+> Promise是ES6中新增的一个内置的构造函数
+
+![avatar](/Promise/PromiseConstructor.png)
+
+> 所以需要使用new关键字实例化一个Promise实例。
+```js
+let p = new Promise(function (resolve, reject) {
+    
+});
+console.log(p);
+```
+输出如下：
+
+![avatar](/Promise/PromiseObject.png)
