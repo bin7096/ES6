@@ -214,6 +214,7 @@ console.log(p);         // 这里打印Promise对象时，异步操作仍未完�
 ![avatar](/Promise/1.png)
 
 * 下面的代码示例，都使用上面封装的这个发送ajax请求的Promise对象。
+## Promise实例的方法
 ### then方法
 > Promise.prototype.then方法接收两个回调函数作为参数，第一个为resolve（解决/成功）的回调，第二个为reject（拒绝/失败）的回调。两个参数都可不传，不传则不会执行对应的回调体。
 ```js
@@ -276,6 +277,7 @@ p.catch(function (cbData) {
 ![avatar](/Promise/6.png)
 
 ### then与catch的调用问题
+> 当Promise.prototype.then方法和Promise.prototype.catch方法链式调用时，它们的顺序会影响到执行的结果。
 #### 1.当先调用了then方法，且then的第二参数（reject的回调）存在，如下：
 ```js
 let p = sendAjax('http://127.0.0.1:8000/phpserver/index.html');     //此接口不存在
@@ -342,3 +344,47 @@ p.then(function (cbData) {
 * 进入network中查看实际发送的ajax请求，实际上只成功发送一个请求。当出现第一个发送失败的请求后，后续的发送ajax请求的操作都被中断了，效果如下：
 
 ![avatar](/Promise/11.png)
+
+## Promise构造器的方法
+### all方法
+> Promise.constructor.all方法接收一个可迭代的Promise对象集合（通常为数组）作为参数，它同时监听着传入的Promise对象的状态。
+```js
+let p1 = sendAjax('http://127.0.0.1:8000/phpserver');
+let p2 = sendAjax('http://127.0.0.1:8000/phpserver');
+
+let ps = Promise.all([p1, p2]);
+
+// 由于都是异步任务，这里等待任务执行完毕再打印
+setTimeout(function () {
+    console.log(p1);
+    console.log(p2);
+    console.log(ps);
+}, 15000);
+```
+![avatar](/Promise/12.png)
+* all方法会“监听”传入的多个Promise对象的状态，当多个Promise对象都为fulfilled状态时，则触发resolve的回调。同时回调接收到的参数也是多个resolve回调传递的参数，顺序与Promise对象集合一致。如下：
+```js
+let p1 = sendAjax('http://127.0.0.1:8000/phpserver');
+let p2 = sendAjax('http://127.0.0.1:8000/phpserver');
+
+let ps = Promise.all([p1, p2]);
+
+ps.then(function (cbData) {
+    console.log(cbData);
+});
+```
+![avatar](/Promise/13.png)
+* 当多个Promise对象中有一个状态为rejected时，则触发reject的回调。如下：
+```js
+let p1 = sendAjax('http://127.0.0.1:8000/phpserver');
+let p2 = sendAjax('http://127.0.0.1:8000/phpserver');
+
+let ps = Promise.all([p1, p2]);
+
+ps.then(function (cbData) {
+    console.log(cbData);
+});
+```
+![avatar](/Promise/14.png)
+* 如果打开浏览器的network栏，可以看到多个ajax请求几乎是同时发送，说明Promise.constructor.all方法会同时（并行的方式）执行异步任务。待异步任务都执行完毕后，再根据Promise集合的整体状态触发对应的回调。
+![avatar](/Promise/15.png)
