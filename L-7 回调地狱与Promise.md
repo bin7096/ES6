@@ -131,10 +131,10 @@ sendAjax(url, data).then(function (res) {
 | Fulfilled | 任务执行完成并且成功的状态。    |
 | Rejected  | 任务完成并且失败的状态。       |
 
-* Promise的状态只可能从`Pending`状态转到`Fulfilled`状态或`Rejected`状态，且`不可逆向转换`。同时`Fulfilled`和`Rejected`状态也不能相互转换。
+* Promise的状态只可能从`pending`状态转到`fulfilled`状态或`rejected`状态，且`不可逆向转换`。同时`fulfilled`和`rejected`状态也不能相互转换。
 * Promise对象必须实现`then方法`，then是Promise规范的`核心`。
 * Promise的then方法`必须返回`一个Promise对象，同一个Promise对象可以调用`多个then方法`，并且回调的执行顺序跟它们的注册顺序一致。
-* then方法接收两个参数，分别为`成功回调`和`失败回调`。分别在`Padding转到Fulfilled`和`Padding转到Rejected`时调用。
+* then方法接收两个参数，分别为`成功回调`和`失败回调`。分别在`Padding转到fulfilled`和`Padding转到rejected`时调用。
 * 当使用了`catch方法`时，`then方法`可以不传`第二参数`，在当前链式操作中，`首个失败回调`会在catch中执行，并且中断后面的异步操作。
 
 ![avatar](/Promise/promises-流程图.png)
@@ -150,13 +150,106 @@ sendAjax(url, data).then(function (res) {
 
 ![avatar](/Promise/PromiseConstructor.png)
 
-> 所以需要使用new关键字实例化一个Promise实例。
+> 所以需要使用new关键字实例化一个Promise实例。并且传入一个匿名函数，匿名函数传入两个参数：`resolve（成功回调）`和`reject（失败回调）`。在函数体中进行逻辑判断，并使用resolve或reject触发对应的回调。
+
+ps：`resolve（成功回调）`和`reject（失败回调）`的名称可以自行定义。
 ```js
 let p = new Promise(function (resolve, reject) {
-    
+    if (true) {
+        resolve(true);
+    }else{
+        reject(false);
+    }
 });
 console.log(p);
 ```
-输出如下：
+上面就是Promise的简单使用，当使用resolve回调方法时，Promise对象的状态便切换到resolved（fulfilled，成功的状态）。输出如下：
 
 ![avatar](/Promise/PromiseObject.png)
+
+上面方法仍有局限性。比如通常封装ajax请求的方法，都需要向函数中传入url和数据集，实际效果如下：
+```js
+let url = 'http://127.0.0.1:8000/phpserver';
+let p = new Promise(function (resolve, reject) {
+    // 这里打印的url是直接访问父级作用域的变量
+    console.log(url);
+    $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: "json",
+        data : {},
+        success: function(res){
+            resolve(res);
+        },
+        error: function (res) {
+            reject(res);
+        }
+    });
+});
+```
+上面这种方式传递参数，在函数体内直接访问父级作用域中的变量。十分不方便，而且容易因为父级作用域中的变量污染而影响到实际的逻辑处理。可以使用以下方式封装：
+```js
+function sendAjax(url) {
+    // 这里访问的url是调用函数时传入的参数
+    console.log(url);
+    // 使用return返回一个Promise实例，与直接对变量赋值Promise实例是一样的，外部使用变量接收即可。
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: "json",
+            data : {},
+            success: function(res){
+                resolve(res);
+            },
+            error: function (res) {
+                reject(res);
+            }
+        });
+    });
+}
+let p = sendAjax('http://127.0.0.1:8000/phpserver');
+console.log(p);         // 这里打印Promise对象时，异步操作仍未完成，所以状态是pending。
+```
+![avatar](/Promise/1.png)
+
+* 下面的代码示例，都使用上面封装的这个发送ajax请求的Promise对象。
+### then方法
+> Promise.prototype.then方法接收两个回调函数作为参数，第一个为resolve（解决/成功）的回调，第二个为reject（拒绝/失败）的回调。两个参数都可不传，不传则不会执行对应的回调体。
+```js
+let p = sendAjax('http://127.0.0.1:8000/phpserver');
+p.then(function (cbData) {
+    console.log(cbData);
+}, function (cbData) {
+    console.log(cbData);
+});
+```
+解决（成功）的结果：
+
+![avatar](/Promise/2.png)
+
+模拟ajax请求失败时，拒绝（失败）的结果：
+
+![avatar](/Promise/3.png)
+
+如果不需要处理失败的回调，上面代码可以简化成如下：
+```js
+let p = sendAjax('http://127.0.0.1:8000/phpserver');
+p.then(function (cbData) {
+    console.log(cbData);
+});
+```
+### then方法的链式调用
+> 在Promise.prototype.then方法处理回调结束时，返回另一个Promise对象，这个对象可以调用下一个then方法，形成链式调用。如下：
+```js
+let p = sendAjax('http://127.0.0.1:8000/phpserver');
+p.then(function (cbData) {
+    console.log(cbData);
+    // 此处返回下一次ajax请求的Promise对象
+    return sendAjax('http://127.0.0.1:8000/phpserver');
+}).then(function (cbData) {
+    console.log(cbData);
+});
+```
+![avatar](/Promise/4.png)
+### catch方法
