@@ -135,7 +135,7 @@ sendAjax(url, data).then(function (res) {
 * Promise对象必须实现`then方法`，then是Promise规范的`核心`。
 * Promise的then方法`必须返回`一个Promise对象，同一个Promise对象可以调用`多个then方法`，并且回调的执行顺序跟它们的注册顺序一致。
 * then方法接收两个参数，分别为`成功回调`和`失败回调`。分别在`Padding转到fulfilled`和`Padding转到rejected`时调用。
-* 当使用了`catch方法`时，`then方法`可以不传`第二参数`，在当前链式操作中，`首个失败回调`会在catch中执行，并且中断后面的异步操作。
+* 当在链式调用结尾使用了`catch方法`时，并且`then方法`不传`第二参数`，在当前链式操作中，`首个失败回调`会在catch中执行，并且中断后面的异步操作。
 
 ![avatar](/Promise/promises-流程图.png)
 
@@ -240,7 +240,7 @@ p.then(function (cbData) {
 });
 ```
 ### then方法的链式调用
-> 在Promise.prototype.then方法处理回调结束时，返回另一个Promise对象，这个对象可以调用下一个then方法，形成链式调用。如下：
+> 在Promise.prototype.then方法处理回调结束时，返回另一个Promise对象，这个Promise对象可以调用下一个then方法，形成链式调用。如下：
 ```js
 let p = sendAjax('http://127.0.0.1:8000/phpserver');
 p.then(function (cbData) {
@@ -252,4 +252,93 @@ p.then(function (cbData) {
 });
 ```
 ![avatar](/Promise/4.png)
+
+如果上一步then方法没有返回Promise对象，当前then方法调用仍不会报错，但是回调接受的参数值都为undefined，如下：
+```js
+let p = sendAjax('http://127.0.0.1:8000/phpserver');
+p.then(function (cbData) {
+    console.log(cbData);
+    // 此处返回下一次ajax请求的Promise对象
+    sendAjax('http://127.0.0.1:8000/phpserver');
+}).then(function (cbData) {
+    console.log(cbData);
+});
+```
+![avatar](/Promise/5.png)
 ### catch方法
+> Promise.prototype.catch方法可以处理Promise对象中reject（拒绝/失败）的回调。如下：
+```js
+let p = sendAjax('http://127.0.0.1:8000/phpserver/index.html');     //此接口不存在
+p.catch(function (cbData) {
+    console.log(cbData);
+});
+```
+![avatar](/Promise/6.png)
+
+### then与catch的调用问题
+> 当先调用了then方法，且then的第二参数（reject的回调）存在，如下：
+```js
+let p = sendAjax('http://127.0.0.1:8000/phpserver/index.html');     //此接口不存在
+p.then(function (cbData) {
+    console.log(cbData);
+}, function (cbData) {
+    console.log(cbData);
+}).catch(function (cbData) {
+    console.error(cbData);
+});
+```
+reject触发的回调会进入then的第二个参数（回调函数）中处理，效果如下：
+
+![avatar](/Promise/7.png)
+
+> 当先调用then方法，且then的第二参数（reject的回调）不传时，如下：
+```js
+let p = sendAjax('http://127.0.0.1:8000/phpserver/index.html');     //此接口不存在
+p.then(function (cbData) {
+    console.log(cbData);
+}).catch(function (cbData) {
+    console.error(cbData);
+});
+```
+reject触发的回调会进入catch方法中处理，效果如下：
+
+![avatar](/Promise/8.png)
+
+> 当先调用catch方法时，且then的第二参数（reject的回调）存在，如下：
+```js
+let p = sendAjax('http://127.0.0.1:8000/phpserver/index.html');     //此接口不存在
+p.catch(function (cbData) {
+    console.error(cbData);
+}).then(function (cbData) {
+    console.log(cbData);
+}, function (cbData) {
+    console.log(cbData);
+});
+```
+reject触发的回调会进入catch方法中执行，且先调用catch方法后再链式调用then方法，catch方法中没有返回一个新的Promise对象，then方法会进入resolve回调，但是接受到的参数值为undefined。所以catch并不会中断后面其他方法的执行。如下：
+
+![avatar](/Promise/9.png)
+
+> 所以，一般使用多个then链式调用时，将catch方法的调用放在结尾，并且多个then方法的第二参数都不传。这样如果遇到异步中的首个reject回调，都会进入catch方法中处理回调逻辑，且中断后续的其他异步操作。如下：
+```js
+let p = sendAjax('http://127.0.0.1:8000/phpserver');                //此接口正常使用
+// 用多个then方法链式调用的方式发送三个ajax请求
+p.then(function (cbData) {
+    console.log(cbData);
+    return sendAjax('http://127.0.0.1:8000/phpserver/1.html');      //此接口不存在
+}).then(function (cbData) {
+    console.log(cbData);
+    return sendAjax('http://127.0.0.1:8000/phpserver/2.html');      //此接口不存在
+}).then(function (cbData) {
+    console.log(cbData);
+}).catch(function (cbData) {
+    console.error(cbData);
+});
+```
+控制台打印出了第一个ajax请求的返回结果和首个ajax请求失败信息，效果如下：
+
+![avatar](/Promise/10.png)
+
+进入network中查看实际发送的ajax请求，实际上只成功发送一个请求。当出现第一个发送失败的请求后，后续的发送ajax请求的操作都被中断了，效果如下：
+
+![avatar](/Promise/11.png)
