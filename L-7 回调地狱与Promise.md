@@ -374,6 +374,7 @@ ps.then(function (cbData) {
 });
 ```
 ![avatar](/Promise/13.png)
+
 * 当多个Promise对象中有一个状态为rejected时，则触发reject的回调。如下：
 ```js
 let p1 = sendAjax('http://127.0.0.1:8000/phpserver');
@@ -386,5 +387,8 @@ ps.then(function (cbData) {
 });
 ```
 ![avatar](/Promise/14.png)
+
 * 如果打开浏览器的network栏，可以看到多个ajax请求几乎是同时发送，说明Promise.constructor.all方法会同时（并行的方式）执行异步任务。待异步任务都执行完毕后，再根据Promise集合的整体状态触发对应的回调。
+
+
 ![avatar](/Promise/15.png)
