@@ -240,6 +240,29 @@ p.then(function (cbData) {
     console.log(cbData);
 });
 ```
+### finally方法
+> Promise.prototype.finally方法只接收一个回调函数作为参数，不管调用finally方法的Promise对象转为fulfilled或是rejected，都会触发执行这个回调函数，但是无法接收对应的回调参数。
+```js
+let p1 = sendAjax('http://127.0.0.1:8000/phpserver');
+p1.finally(function (cbData) {
+    console.log(cbData);
+});
+
+let p2 = sendAjax('http://127.0.0.1:8000/phpserver');
+p2.finally(function (cbData) {
+    console.log(cbData);
+});
+```
+![avatar](/Promise/20.png)
+
+* 在使用Promise对象构造器上的resolve和reject方法时，它们都返回一个Promise对象。再链式调用then方法会改变这个Promise对象的状态和回调返回值。
+
+![avatar](/Promise/21.png)
+
+* 而在没有使用then的链式中，finally方法不会改变Promise对象的状态和回调返回值。
+
+![avatar](/Promise/22.png)
+
 ### then方法的链式调用
 > 在Promise.prototype.then方法处理回调结束时，返回另一个Promise对象，这个Promise对象可以调用下一个then方法，形成链式调用。如下：
 ```js
