@@ -390,5 +390,67 @@ ps.then(function (cbData) {
 
 * 如果打开浏览器的network栏，可以看到多个ajax请求几乎是同时发送，说明Promise.constructor.all方法会同时（并行的方式）执行异步任务。待异步任务都执行完毕后，再根据Promise集合的整体状态触发对应的回调。
 
-
 ![avatar](/Promise/15.png)
+
+在使用Promise.constructor.all的同时，在then方法中使用箭头函数，可能会造成所有Promise状态没有变为fulfilled或rejected时，就触发then。详见：https://blog.csdn.net/wf19930209/article/details/79350060
+## race方法
+> Promise.constructor.race方法接收一个可迭代的Promise对象的集合（通常为数组）作为参数，只要其中一个Promise对象由padding转变为fulfilled或rejected，就会触发对应回调。
+```js
+let ps = Promise.race([
+    new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            resolve('5s');
+        }, 5000);
+    }),
+    new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            reject('1s');
+        }, 1000);
+    }),
+    new Promise(function (resolve, reject) {
+        setTimeout(function () {
+            resolve('10s');
+        }, 10000);
+    })
+]);
+ps.then(function (res) {
+    console.log(res);
+}).catch(function (res) {
+    console.log(res);
+});
+```
+![avatar](/Promise/16.png)
+
+* 再来看下是不是并行处理异步任务
+```js
+function sendAjax(url) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: "json",
+            data : {},
+            success: function(res){
+                resolve(res);
+            },
+            error: function (res) {
+                reject(res);
+            }
+        });
+    });
+}
+let p1 = sendAjax('http://127.0.0.1:8000/phpserver');
+let p2 = sendAjax('http://127.0.0.1:8000/phpserver/1.html');
+let p3 = sendAjax('http://127.0.0.1:8000/phpserver');
+
+let ps = Promise.race([p1, p2, p3]);
+
+ps.then(function (cbData) {
+    console.log(cbData);
+}).catch(function (cbData) {
+    console.error(cbData);
+});
+```
+![avatar](/Promise/17.png)
+
+* 它和Promise.constructor.all一样，会同时（并行的方式）执行异步任务。不同的是它只关心Promise实例集合中的第一个状态变化（从padding转为fulfilled或rejected）。
