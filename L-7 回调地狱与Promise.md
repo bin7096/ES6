@@ -454,3 +454,18 @@ ps.then(function (cbData) {
 ![avatar](/Promise/17.png)
 
 * 它和Promise.constructor.all一样，会同时（并行的方式）执行异步任务。不同的是它只关心Promise实例集合中的第一个状态变化（从padding转为fulfilled或rejected）。
+
+### resolve方法
+> 它接收一个任意类型的参数，作为fulfilled（解决、成功）状态对应回调接收的返回值。它返回一个fulfilled状态的Promise对象。
+```js
+let p = Promise.resolve('success的返回结果');
+console.log(p);
+```
+![avatar](/Promise/18.png)
+### reject方法
+> 它接收一个任意类型的参数，作为rejected（拒绝、失败）状态对应回调接收的返回值。它返回一个rejected状态的Promise对象。
+```js
+let p = Promise.reject('error的返回结果');
+console.log(p);
+```
+![avatar](/Promise/19.png)
