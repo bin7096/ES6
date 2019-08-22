@@ -393,7 +393,7 @@ ps.then(function (cbData) {
 ![avatar](/Promise/15.png)
 
 在使用Promise.constructor.all的同时，在then方法中使用箭头函数，可能会造成所有Promise状态没有变为fulfilled或rejected时，就触发then。详见：https://blog.csdn.net/wf19930209/article/details/79350060
-## race方法
+### race方法
 > Promise.constructor.race方法接收一个可迭代的Promise对象的集合（通常为数组）作为参数，只要其中一个Promise对象由padding转变为fulfilled或rejected，就会触发对应回调。
 ```js
 let ps = Promise.race([
