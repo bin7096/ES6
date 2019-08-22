@@ -259,9 +259,13 @@ p2.finally(function (cbData) {
 
 ![avatar](/Promise/21.png)
 
-* 而在没有使用then的链式中，finally方法不会改变Promise对象的状态和回调返回值。
+* 实际上调用了调用了then之后，会生成一个新的Promise对象。
 
 ![avatar](/Promise/22.png)
+
+* 而在没有使用then的链式中，finally方法不会改变Promise对象的状态和回调返回值。
+
+![avatar](/Promise/23.png)
 
 ### then方法的链式调用
 > 在Promise.prototype.then方法处理回调结束时，返回另一个Promise对象，这个Promise对象可以调用下一个then方法，形成链式调用。如下：
