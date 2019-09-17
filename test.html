@@ -5,31 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ES6</title>
-    <script src="zepto.min.js"></script>
 </head>
 <body>
 </body>
-<script>
-    function success(res) {
-        console.log(res);
-    }
-    function error(res) {
-        console.log(res);
-    }
-    function sendAjax(url, data, successCB, errorCB) {
-        $.ajax({
-            url: url,
-            type: 'POST',
-            dataType: "json",
-            data : data,
-            success: function(res){
-                successCB && successCB(res);
-            },
-            error: function (res) {
-                errorCB && errorCB(res);
-            }
-        });
-    }
-    sendAjax('http://127.0.0.1:8000/phpserver', {}, success, error);
+<script type="module">
+    import a from './test.js';
+    console.log(a);
 </script>
 </html>
