@@ -1,1 +1,2 @@
-export default 100;
+let a = 0;
+export {a as number};

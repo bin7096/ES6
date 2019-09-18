@@ -137,7 +137,7 @@ sendAjax(url, data).then(function (res) {
 * then方法接收两个参数，分别为`成功回调`和`失败回调`。分别在`Padding转到fulfilled`和`Padding转到rejected`时调用。
 * 当在链式调用结尾使用了`catch方法`时，并且`then方法`不传`第二参数`，在当前链式操作中，`首个失败回调`会在catch中执行，并且中断后面的异步操作。
 
-![avatar](/Promise/promises-流程图.png)
+![avatar](./images/Promise/promises-流程图.png)
 
 ### Promise的作用
 > `Promise`可以将原来回调地狱中的回调函数，从`横向式增加`变为`纵向增长`。以`链式的风格`和`纵向的书写`，使得代码拥有`更好的可读性`和`易于维护`。
@@ -148,7 +148,7 @@ sendAjax(url, data).then(function (res) {
 ### 创建Promise实例
 > Promise是ES6中新增的一个内置的构造函数
 
-![avatar](/Promise/PromiseConstructor.png)
+![avatar](./images/Promise/PromiseConstructor.png)
 
 > 所以需要使用new关键字实例化一个Promise实例。并且传入一个匿名函数，匿名函数传入两个参数：`resolve（成功回调）`和`reject（失败回调）`。在函数体中进行逻辑判断，并使用resolve或reject触发对应的回调。
 
@@ -165,7 +165,7 @@ console.log(p);
 ```
 上面就是Promise的简单使用，当使用resolve回调方法时，Promise对象的状态便切换到resolved（fulfilled，成功的状态）。输出如下：
 
-![avatar](/Promise/PromiseObject.png)
+![avatar](./images/Promise/PromiseObject.png)
 
 上面方法仍有局限性。比如通常封装ajax请求的方法，都需要向函数中传入url和数据集，实际效果如下：
 ```js
@@ -211,7 +211,7 @@ function sendAjax(url) {
 let p = sendAjax('http://127.0.0.1:8000/phpserver');
 console.log(p);         // 这里打印Promise对象时，异步操作仍未完成，所以状态是pending。
 ```
-![avatar](/Promise/1.png)
+![avatar](./images/Promise/1.png)
 
 * 下面的代码示例，都使用上面封装的这个发送ajax请求的Promise对象。
 ## Promise实例的方法
@@ -227,11 +227,11 @@ p.then(function (cbData) {
 ```
 * 解决（成功）的结果：
 
-![avatar](/Promise/2.png)
+![avatar](./images/Promise/2.png)
 
 * 模拟ajax请求失败时，拒绝（失败）的结果：
 
-![avatar](/Promise/3.png)
+![avatar](./images/Promise/3.png)
 
 * 如果不需要处理失败的回调，上面代码可以简化成如下：
 ```js
@@ -253,19 +253,19 @@ p2.finally(function (cbData) {
     console.log(cbData);
 });
 ```
-![avatar](/Promise/20.png)
+![avatar](./images/Promise/20.png)
 
 * 在使用Promise对象构造器上的resolve和reject方法时，它们都返回一个Promise对象。再链式调用then方法会改变这个Promise对象的状态和回调返回值。
 
-![avatar](/Promise/21.png)
+![avatar](./images/Promise/21.png)
 
 * 实际上调用了调用了then之后，会生成一个新的Promise对象。
 
-![avatar](/Promise/22.png)
+![avatar](./images/Promise/22.png)
 
 * 而在没有使用then的链式中，finally方法不会改变Promise对象的状态和回调返回值。
 
-![avatar](/Promise/23.png)
+![avatar](./images/Promise/23.png)
 
 ### then方法的链式调用
 > 在Promise.prototype.then方法处理回调结束时，返回另一个Promise对象，这个Promise对象可以调用下一个then方法，形成链式调用。如下：
@@ -279,7 +279,7 @@ p.then(function (cbData) {
     console.log(cbData);
 });
 ```
-![avatar](/Promise/4.png)
+![avatar](./images/Promise/4.png)
 
 * 如果上一步then方法没有返回Promise对象，当前then方法调用仍不会报错，但是回调接受的参数值都为undefined，如下：
 ```js
@@ -292,7 +292,7 @@ p.then(function (cbData) {
     console.log(cbData);
 });
 ```
-![avatar](/Promise/5.png)
+![avatar](./images/Promise/5.png)
 ### catch方法
 > Promise.prototype.catch方法可以处理Promise对象中reject（拒绝/失败）的回调。如下：
 ```js
@@ -301,7 +301,7 @@ p.catch(function (cbData) {
     console.log(cbData);
 });
 ```
-![avatar](/Promise/6.png)
+![avatar](./images/Promise/6.png)
 
 ### then与catch的调用问题
 > 当Promise.prototype.then方法和Promise.prototype.catch方法链式调用时，它们的顺序会影响到执行的结果。
@@ -318,7 +318,7 @@ p.then(function (cbData) {
 ```
 * reject触发的回调会进入then的第二个参数（回调函数）中处理，效果如下：
 
-![avatar](/Promise/7.png)
+![avatar](./images/Promise/7.png)
 
 #### 2.当先调用then方法，且then的第二参数（reject的回调）不传时，如下：
 ```js
@@ -331,7 +331,7 @@ p.then(function (cbData) {
 ```
 * reject触发的回调会进入catch方法中处理，效果如下：
 
-![avatar](/Promise/8.png)
+![avatar](./images/Promise/8.png)
 
 #### 3.当先调用catch方法时，且then的第二参数（reject的回调）存在，如下：
 ```js
@@ -346,7 +346,7 @@ p.catch(function (cbData) {
 ```
 * reject触发的回调会进入catch方法中执行，且先调用catch方法后再链式调用then方法，catch方法中没有返回一个新的Promise对象，then方法会进入resolve回调，但是接受到的参数值为undefined。所以catch并不会中断后面其他方法的执行。如下：
 
-![avatar](/Promise/9.png)
+![avatar](./images/Promise/9.png)
 
 #### 4.所以，一般使用多个then链式调用时，将catch方法的调用放在结尾，并且多个then方法的第二参数都不传。这样如果遇到异步中的首个reject回调，都会进入catch方法中处理回调逻辑，且中断后续的其他异步操作。如下：
 ```js
@@ -366,11 +366,11 @@ p.then(function (cbData) {
 ```
 * 控制台打印出了第一个ajax请求的返回结果和首个ajax请求失败信息，效果如下：
 
-![avatar](/Promise/10.png)
+![avatar](./images/Promise/10.png)
 
 * 进入network中查看实际发送的ajax请求，实际上只成功发送一个请求。当出现第一个发送失败的请求后，后续的发送ajax请求的操作都被中断了，效果如下：
 
-![avatar](/Promise/11.png)
+![avatar](./images/Promise/11.png)
 
 ## Promise构造器的方法
 ### all方法
@@ -388,7 +388,7 @@ setTimeout(function () {
     console.log(ps);
 }, 15000);
 ```
-![avatar](/Promise/12.png)
+![avatar](./images/Promise/12.png)
 * all方法会“监听”传入的多个Promise对象的状态，当多个Promise对象都为fulfilled状态时，则触发resolve的回调。同时回调接收到的参数也是多个resolve回调传递的参数，顺序与Promise对象集合一致。如下：
 ```js
 let p1 = sendAjax('http://127.0.0.1:8000/phpserver');
@@ -400,7 +400,7 @@ ps.then(function (cbData) {
     console.log(cbData);
 });
 ```
-![avatar](/Promise/13.png)
+![avatar](./images/Promise/13.png)
 
 * 当多个Promise对象中有一个状态为rejected时，则触发reject的回调。如下：
 ```js
@@ -413,11 +413,11 @@ ps.then(function (cbData) {
     console.log(cbData);
 });
 ```
-![avatar](/Promise/14.png)
+![avatar](./images/Promise/14.png)
 
 * 如果打开浏览器的network栏，可以看到多个ajax请求几乎是同时发送，说明Promise.constructor.all方法会同时（并行的方式）执行异步任务。待异步任务都执行完毕后，再根据Promise集合的整体状态触发对应的回调。
 
-![avatar](/Promise/15.png)
+![avatar](./images/Promise/15.png)
 
 在使用Promise.constructor.all的同时，在then方法中使用箭头函数，可能会造成所有Promise状态没有变为fulfilled或rejected时，就触发then。详见：https://blog.csdn.net/wf19930209/article/details/79350060
 ### race方法
@@ -446,7 +446,7 @@ ps.then(function (res) {
     console.log(res);
 });
 ```
-![avatar](/Promise/16.png)
+![avatar](./images/Promise/16.png)
 
 * 再来看下是不是并行处理异步任务
 ```js
@@ -478,7 +478,7 @@ ps.then(function (cbData) {
     console.error(cbData);
 });
 ```
-![avatar](/Promise/17.png)
+![avatar](./images/Promise/17.png)
 
 * 它和Promise.constructor.all一样，会同时（并行的方式）执行异步任务。不同的是它只关心Promise实例集合中的第一个状态变化（从padding转为fulfilled或rejected）。
 
@@ -488,11 +488,11 @@ ps.then(function (cbData) {
 let p = Promise.resolve('success的返回结果');
 console.log(p);
 ```
-![avatar](/Promise/18.png)
+![avatar](./images/Promise/18.png)
 ### reject方法
 > 它接收一个任意类型的参数，作为rejected（拒绝、失败）状态对应回调接收的返回值。它返回一个rejected状态的Promise对象。
 ```js
 let p = Promise.reject('error的返回结果');
 console.log(p);
 ```
-![avatar](/Promise/19.png)
+![avatar](./images/Promise/19.png)
