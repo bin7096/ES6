@@ -1,2 +1,2 @@
-let a = 0;
-export {a as number};
+let zero = 0;
+export default zero;
