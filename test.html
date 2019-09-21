@@ -9,8 +9,19 @@
 <body>
 </body>
 <script type="module">
-if (true) {
-    import zero from './test.js';
+function test(arg) {
+    if (arg) {
+        import('./test.js').then(function (res) {
+            console.log(res);
+        });
+    }else{
+        import('./test2.js').then(function (res) {
+            console.log(res);
+        });
+    }
 }
+</script>
+<script>
+test(true);
 </script>
 </html>

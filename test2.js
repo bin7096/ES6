@@ -1,4 +1,2 @@
 export default 0;
-export let a = 1;
-export let b = 2;
-export let c = 3;
+console.log('I am test2.js');
