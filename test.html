@@ -8,20 +8,18 @@
 </head>
 <body>
 </body>
-<script type="module">
-function test(arg) {
-    if (arg) {
-        import('./test.js').then(function (res) {
-            console.log(res);
-        });
-    }else{
-        import('./test2.js').then(function (res) {
-            console.log(res);
-        });
-    }
-}
-</script>
 <script>
-test(true);
+function Test(name) {
+    this.name = name;
+}
+function Test2(name) {
+    // Test.call(this, name);
+    Test.apply(this, [name]);           // 改变当前构造函数的this指向，并将参数传递给继承的构造函数
+    this.__proto__ = Test.prototype;
+}
+var t = new Test2('zhangsan');
+console.log(t);
+console.log(t.__proto__ === Test.prototype);
+console.log(t.constructor === Test.prototype.constructor);
 </script>
 </html>
