@@ -10,10 +10,19 @@
 </body>
 <script>
 class Test {
-    static func1 (){
-        console.log('I am func1');
+    constructor (name){
+        this.name = name;
+    }
+    func1 (){
+        console.log('I am parent');
     }
 }
-Test.func1();
+class Test2 extends Test {
+    func1 (){
+        super.func1();
+    }
+}
+let t = new Test2('test');
+t.func1();
 </script>
 </html>
