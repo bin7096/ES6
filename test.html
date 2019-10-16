@@ -9,20 +9,10 @@
 <body>
 </body>
 <script>
-class Test {
-    constructor (name){
-        this.name = name;
-    }
-    func1 (){
-        console.log('I am parent');
-    }
+let a = [1, 2, 3];
+a.name = 4;
+for (let k of a.keys()) {
+    console.log(k);
 }
-class Test2 extends Test {
-    func1 (){
-        super.func1();
-    }
-}
-let t = new Test2('test');
-t.func1();
 </script>
 </html>
