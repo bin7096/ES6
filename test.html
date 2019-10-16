@@ -9,10 +9,11 @@
 <body>
 </body>
 <script>
-let a = [1, 2, 3];
-a.name = 4;
-for (let k of a.keys()) {
-    console.log(k);
-}
+let arr = [1, 2, 3];
+let a = arr[Symbol.iterator]();
+console.log(a.next());
+console.log(a.next());
+console.log(a.next());
+console.log(a.next());
 </script>
 </html>
