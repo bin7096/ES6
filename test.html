@@ -9,11 +9,15 @@
 <body>
 </body>
 <script>
-let arr = [1, 2, 3];
-let a = arr[Symbol.iterator]();
-console.log(a.next());
-console.log(a.next());
-console.log(a.next());
-console.log(a.next());
+let str = '123456';
+let s = [...str];
+console.log(s);
+s = s[Symbol.iterator]();
+console.log(s.next());
+console.log(s.next());
+console.log(s.next());
+console.log(s.next());
+console.log(s.next());
+console.log(s.next());
 </script>
 </html>
