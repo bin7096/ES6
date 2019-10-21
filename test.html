@@ -9,10 +9,25 @@
 <body>
 </body>
 <script>
-let str = '123456';
-let s = [...str];
+let str = new String('123456');
+str[Symbol.iterator] = function () {
+    return {
+        next : function () {
+            if (this._i >= str.length) {
+                return { value: undefined, done: true };
+            }else{
+                var k = this._i;
+                this._i++;
+                return {value : str[k], done : false};
+            }
+        },
+        _i : 0
+    }
+}
+console.log(str);
+let s = str[Symbol.iterator]();
 console.log(s);
-s = s[Symbol.iterator]();
+console.log(s.next());
 console.log(s.next());
 console.log(s.next());
 console.log(s.next());
