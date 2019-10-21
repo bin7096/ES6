@@ -9,17 +9,31 @@
 <body>
 </body>
 <script>
-let iterable = {};
-iterable[Symbol.iterator] = function * () {
-    yield 1;
-    yield 2;
-    yield 3;
+function makeIterator(string) {
+    let index = 0;
+    return {
+        next : function () {
+            let res = {};
+            if (index >= string.length) {
+                res = {value : undefined, done : true};
+            }else{
+                res = {value : string[index], done : false};
+                index ++;
+            }
+            return res;
+        }
+    }
 }
-console.log([...iterable]);
-let iterator = iterable[Symbol.iterator]();
-console.log(iterator.next());
-console.log(iterator.next());
-console.log(iterator.next());
-console.log(iterator.next());
+let iterator = makeIterator('makeIterator');
+// 递归遍历
+function each(arg) {
+    console.log(arg);
+    if (!arg.done) {
+        each(iterator.next());
+    }else{
+        return;
+    }
+}
+each(iterator.next());
 </script>
 </html>
