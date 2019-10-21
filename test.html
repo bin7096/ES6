@@ -9,30 +9,17 @@
 <body>
 </body>
 <script>
-let str = new String('123456');
-str[Symbol.iterator] = function () {
-    return {
-        next : function () {
-            if (this._i >= str.length) {
-                return { value: undefined, done: true };
-            }else{
-                var k = this._i;
-                this._i++;
-                return {value : str[k], done : false};
-            }
-        },
-        _i : 0
-    }
+let iterable = {};
+iterable[Symbol.iterator] = function * () {
+    yield 1;
+    yield 2;
+    yield 3;
 }
-console.log(str);
-let s = str[Symbol.iterator]();
-console.log(s);
-console.log(s.next());
-console.log(s.next());
-console.log(s.next());
-console.log(s.next());
-console.log(s.next());
-console.log(s.next());
-console.log(s.next());
+console.log([...iterable]);
+let iterator = iterable[Symbol.iterator]();
+console.log(iterator.next());
+console.log(iterator.next());
+console.log(iterator.next());
+console.log(iterator.next());
 </script>
 </html>
