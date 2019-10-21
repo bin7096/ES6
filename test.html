@@ -9,11 +9,10 @@
 <body>
 </body>
 <script>
-console.log(Symbol('123') === Symbol('123'));
-console.log(Symbol(123) === Symbol(123));
-console.log(Symbol(true) === Symbol(true));
-console.log(Symbol(undefined) === Symbol(undefined));
-console.log(Symbol(null) === Symbol(null));
-console.log(Symbol({}) === Symbol({}));
+let sym = Symbol();
+console.log(sym);
+var symObj = Object(sym);
+console.log(symObj);
+console.log(new Number('123'));
 </script>
 </html>
