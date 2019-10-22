@@ -9,10 +9,7 @@
 <body>
 </body>
 <script>
-let sym = Symbol();
-console.log(sym);
-var symObj = Object(sym);
-console.log(symObj);
-console.log(new Number('123'));
+let sym = Symbol('abc');
+console.log(sym.description);           // abc
 </script>
 </html>
