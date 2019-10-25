@@ -9,7 +9,12 @@
 <body>
 </body>
 <script>
-let sym = Symbol('abc');
-console.log(sym.description);           // abc
+class Test {
+    [Symbol.hasInstance](param){
+        console.log(1);
+        return false;
+    }
+};
+console.log('abc' instanceof new Test());
 </script>
 </html>
