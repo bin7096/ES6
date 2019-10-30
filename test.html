@@ -9,23 +9,18 @@
 <body>
 </body>
 <script>
-// 数组进行concat合并时的默认行为是展开的，它的isConcatSpreadable默认为undefined。
-let arr = [1, 2, 3];
-console.log(arr[Symbol.isConcatSpreadable]);
-console.log([4, 5].concat(arr));
-console.log('------------------------------------');
-// 当数组的Symbol.isConcatSpreadable属性被设置为false时，数组在进行concat合并时，则不展开。
-arr[Symbol.isConcatSpreadable] = false;
-console.log([4, 5].concat(arr));
-console.log('------------------------------------');
-
-// 而类似数组的对象则相反，默认不展开。
-let obj = {length : 3, 0 : 'a', 1 : 'b', 2 : 'c'};
-console.log(obj[Symbol.isConcatSpreadable]);
-console.log([0, 1].concat(obj));
-console.log('------------------------------------');
-// 当对象的Symbol.isConcatSpreadable属性设置为true时，它在进行concat合并时，是可以展开的。
-obj[Symbol.isConcatSpreadable] = true;
-console.log([0, 1].concat(obj));
+class MyArray extends Array {
+    // Symbol.species属性的固定写法，必须使用static和get取值器
+    static get [Symbol.species]() {
+        return Array;
+    }
+}
+let arr = new MyArray(1, 2, 3);
+let a = arr.map(x => x);
+let b = arr.filter(x => x > 1);
+console.log(a instanceof MyArray);
+console.log(a instanceof Array);
+console.log(b instanceof MyArray);
+console.log(b instanceof Array);
 </script>
 </html>
