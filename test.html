@@ -9,14 +9,11 @@
 <body>
 </body>
 <script>
-let obj = {
-    // 直接声明：
-    generatorFn1 : function* () {},
-    // 简写声明：
-    *generatorFn2(){}
+function * fn(arr) {
+    arr.forEach(e => {
+        yield e;
+    });
 }
-// 对象外部声明
-obj.generatorFn3 = function* () {};
-console.log(obj);
+console.log(fn([1, 2, 3]));
 </script>
 </html>
