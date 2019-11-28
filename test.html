@@ -9,11 +9,16 @@
 <body>
 </body>
 <script>
-function * fn(arr) {
-    arr.forEach(e => {
-        yield e;
-    });
+function * fn(x) {
+    var y = yield(1 + 1);
+    yield y;
+    var z = yield (x - 1);
+    yield z;
 }
-console.log(fn([1, 2, 3]));
+let f = fn(5);
+console.log(f.next());
+console.log(f.next(12));
+console.log(f.next(1));
+console.log(f.next(1));
 </script>
 </html>

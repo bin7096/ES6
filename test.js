@@ -1,5 +1,10 @@
-let arr = [1, 2, 3];
-console.log(arr[Symbol.isConcatSpreadable]);
-console.log([4, 5].concat(arr));
-arr[Symbol.isConcatSpreadable] = false;
-console.log([4, 5].concat(arr));
+function* fn(x) {
+    var y = yield (1 + 1);
+    yield y;
+    yield x;
+}
+let f = fn(5);
+console.log(f.next());
+console.log(f.next(12));
+console.log(f.next(1));
+console.log(f.next(1));
