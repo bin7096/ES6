@@ -15,10 +15,13 @@ function * fn(x) {
     var z = yield (x - 1);
     yield z;
 }
-let f = fn(5);
-console.log(f.next());
-console.log(f.next(12));
-console.log(f.next(1));
-console.log(f.next(1));
+function wrapper() {
+    let f = fn(5);
+    f.next();
+    return f;
+}
+console.log(wrapper().next(12));
+console.log(wrapper().next(1));
+console.log(wrapper().next(1));
 </script>
 </html>
